@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-namespace EmptyFrame.Log
+namespace EmptyFrame
 {
     /// <summary>
     /// 文件处理器

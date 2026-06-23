@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace EmptyFrame.Log
+namespace EmptyFrame
 {
     public static class LogSystem
     {

@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace EmptyFrame
+namespace EmptyFrame.Editor
 {
     public class EmptyFrameMenu
     {

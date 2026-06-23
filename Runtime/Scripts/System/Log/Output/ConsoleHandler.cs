@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace EmptyFrame.Log
+namespace EmptyFrame
 {
     /// <summary>
     /// 控制台处理器

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-namespace EmptyFrame.Log
+namespace EmptyFrame
 {
     public class LogModule 
     {

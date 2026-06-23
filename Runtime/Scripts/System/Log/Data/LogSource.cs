@@ -1,4 +1,4 @@
-﻿namespace EmptyFrame.Log
+﻿namespace EmptyFrame
 {
     /// <summary>
     /// 日志来源

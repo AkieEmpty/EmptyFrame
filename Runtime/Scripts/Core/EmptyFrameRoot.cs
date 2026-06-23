@@ -1,4 +1,3 @@
-using EmptyFrame.Log;
 using UnityEngine;
 
 namespace EmptyFrame

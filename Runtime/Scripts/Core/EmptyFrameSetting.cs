@@ -1,5 +1,4 @@
-﻿using EmptyFrame.Log;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace EmptyFrame.Log
+namespace EmptyFrame
 {
     /// <summary>
     /// 日志数据

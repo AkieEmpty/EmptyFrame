@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Callbacks;
 
-namespace EmptyFrame.Log
+namespace EmptyFrame
 {
     /// <summary>
     /// 控制台日志重定向器

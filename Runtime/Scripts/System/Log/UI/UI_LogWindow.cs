@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
-using static Codice.CM.WorkspaceServer.WorkspaceTreeDataStore;
 
 
-namespace EmptyFrame.Log
+
+namespace EmptyFrame
 {  
     /// <summary>
     /// 日志系统窗口

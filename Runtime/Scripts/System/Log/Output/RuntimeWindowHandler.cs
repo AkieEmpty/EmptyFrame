@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace EmptyFrame.Log
+namespace EmptyFrame
 {
     /// <summary>
     /// 运行时窗口处理器
