@@ -1,8 +1,4 @@
-﻿
-
-using Unity.IO.LowLevel.Unsafe;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EmptyFrame
 {
