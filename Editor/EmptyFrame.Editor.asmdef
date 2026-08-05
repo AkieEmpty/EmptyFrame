@@ -1,0 +1,22 @@
+{
+    "name": "EmptyFrame.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6099a32e2785f52408c43d45cfeb3b02",
+        "GUID:c6a3a0820329f284f8352e41614a951c",
+        "GUID:229f95b0394ecc440974c264eb19dcd2",
+        "GUID:2373f786d14518f44b0f475db77ba4de",
+        "GUID:69448af7b92c7f342b298e06a37122aa"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

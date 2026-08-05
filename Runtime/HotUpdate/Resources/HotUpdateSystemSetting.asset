@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f14b0da6d55ad9f47aa148ccd3306dc8, type: 3}
+  m_Name: HotUpdateSystemSetting
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 0
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Title: "<b>\u70ED\u66F4\u65B0</b>"
+  AotBytesDir: Assets/EmptyFrame/Runtime/BuiltIns/Dll/Aot
+  HotUpdateBytesDir: Assets/EmptyFrame/Runtime/BuiltIns/Dll/HotUpdate
+  AotAssemblyNames:
+  - EmptyFrame.Core
+  - mscorlib
+  - System
+  - System.Core
+  - UnityEngine.CoreModule
+  - Unity.Addressables
+  - Unity.ResourceManager
+  - TestAot
+  - Unity.Netcode.Runtime
+  - Unity.Networking.Transport
+  - Unity.Collections
+  HotUpdateAssemblyNames:
+  - TestHotUpdate
