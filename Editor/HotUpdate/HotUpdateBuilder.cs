@@ -105,6 +105,9 @@ namespace EmptyFrame.Editor
 
             string aotBytesDir = Path.Combine(projectDir, hotUpdateSetting.AotBytesDir);
             string hotUpdateBytesDir = Path.Combine(projectDir, hotUpdateSetting.HotUpdateBytesDir);
+            
+            Directory.CreateDirectory(aotBytesDir);
+            Directory.CreateDirectory(hotUpdateBytesDir);
 
             DeployDllGroup(aotDllDir, aotBytesDir, "AOT", hotUpdateSetting.AotAssemblyNames);
             DeployDllGroup(hotUpdateDllDir, hotUpdateBytesDir, "HotUpdate", hotUpdateSetting.HotUpdateAssemblyNames);
