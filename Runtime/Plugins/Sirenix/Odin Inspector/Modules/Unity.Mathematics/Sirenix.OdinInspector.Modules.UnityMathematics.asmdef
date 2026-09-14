@@ -7,5 +7,14 @@
     "autoReferenced": true,
     "overrideReferences": false,
     "precompiledReferences": [ "Sirenix.Utilities.dll", "Sirenix.Utilities.Editor.dll", "Sirenix.OdinInspector.Attributes.dll", "Sirenix.OdinInspector.Editor.dll", "Sirenix.Serialization.dll" ],
-    "defineConstraints": []
+    "defineConstraints": [
+        "ODIN_MODULE_MATHEMATICS"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.mathematics",
+            "expression": "1.0.0",
+            "define": "ODIN_MODULE_MATHEMATICS"
+        }
+    ]
 }

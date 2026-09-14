@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Sirenix.OdinInspector;
 using UnityEngine;
-
+using Sirenix.OdinInspector;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -17,9 +16,10 @@ namespace EmptyFrame.Core
     {
         public UISystemSetting() => Title = "<b>UI</b>";
 
+        [LabelText("预制体路径")]public string WindowPrefabPath = "Assets/UI";
 
         [LabelText("窗口定义映射"), PropertySpace(SpaceBefore = 0)]
-        [DictionaryDrawerSettings(KeyLabel = "窗口类名", ValueLabel = "窗口定义")]
+        [DictionaryDrawerSettings(KeyLabel = "窗口Key", ValueLabel = "窗口定义")]
         public Dictionary<string, UIWindowDefinition> WindowDefinitionDic = new Dictionary<string, UIWindowDefinition>();
     }
 
@@ -42,7 +42,7 @@ namespace EmptyFrame.Core
                 return;
             }
             string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            var setting = AssetDatabase.LoadAssetAtPath<UISystemSetting>(path);
+            UISystemSetting setting = AssetDatabase.LoadAssetAtPath<UISystemSetting>(path);
             setting.InitUIWindowDataDicOnEditor();
         }
 
@@ -54,13 +54,13 @@ namespace EmptyFrame.Core
         public void InitUIWindowDataDicOnEditor()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode) return;
-
+            
             WindowDefinitionDic.Clear();
 
-            Assembly[] asms = AppDomain.CurrentDomain.GetAssemblies();
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             Type baseType = typeof(UIWindowBase);
 
-            foreach (Assembly assembly in asms)
+            foreach (Assembly assembly in assemblies)
             {
                 Type[] types = assembly.GetTypes();
                 foreach (Type type in types)
@@ -70,18 +70,59 @@ namespace EmptyFrame.Core
                     IEnumerable<UIWindowDefinitionAttribute> attributes = type.GetCustomAttributes<UIWindowDefinitionAttribute>();
                     foreach (UIWindowDefinitionAttribute attribute in attributes)
                     {
-                        UIWindowDefinition def = new UIWindowDefinition
+                        UIWindowDefinition definition = new UIWindowDefinition
                         {
                             WindowKey = attribute.WindowKey,
-                            ConfigKey = attribute.ConfigKey,
                             IsCached = attribute.IsCached,
+                            PrefabRef = GetPrefabReference(attribute.WindowKey),
                             Layer = attribute.Layer,
                         };
 
-                        WindowDefinitionDic.Add(attribute.WindowKey, def);
+                        WindowDefinitionDic.Add(attribute.WindowKey, definition);
                     }
                 }
             }
+        }
+
+        private AssetReferenceUIWindow GetPrefabReference(string windowKey)
+        {
+            if (string.IsNullOrEmpty(WindowPrefabPath))
+            {
+                Debug.LogError($"窗口预制体目录未配置");
+                return null;
+            }
+            
+            // 如果目录不存在，则逐级自动创建
+            if (!AssetDatabase.IsValidFolder(WindowPrefabPath))
+            {
+                string[] folders = WindowPrefabPath.Split('/');
+                string currentPath = folders[0];
+
+                for (int i = 1; i < folders.Length; i++)
+                {
+                    string nextPath = $"{currentPath}/{folders[i]}";
+
+                    if (!AssetDatabase.IsValidFolder(nextPath))
+                    {
+                        AssetDatabase.CreateFolder(currentPath, folders[i]);
+                    }
+
+                    currentPath = nextPath;
+                }
+
+                AssetDatabase.Refresh();
+            }
+            
+            string path = $"{WindowPrefabPath}/{windowKey}.prefab";
+            string guid = AssetDatabase.AssetPathToGUID(path);
+            
+            if (string.IsNullOrEmpty(guid))
+            {
+                Debug.LogWarning($"找不到窗口预制体：{path}");
+                return null;
+            }
+
+            return new AssetReferenceUIWindow(guid);
         }
     }
 #endif

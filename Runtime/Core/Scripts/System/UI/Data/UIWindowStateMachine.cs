@@ -3,8 +3,7 @@
 namespace EmptyFrame.Core
 {
     /// <summary>
-    /// UI窗口状态机：集中管理所有合法的状态转换路径。
-    /// 所有状态变更必须经过 ChangedState，确保转换可控、可调试。
+    /// UI窗口状态机
     /// </summary>
     internal class UIWindowStateMachine
     {
@@ -32,7 +31,7 @@ namespace EmptyFrame.Core
         /// </summary>
         public bool CanTransition(UIWindowState target)
         {
-            return transitionMap.TryGetValue(Current, out var targets)
+            return transitionMap.TryGetValue(Current, out HashSet<UIWindowState> targets)
                    && targets.Contains(target);
         }
 
@@ -49,6 +48,14 @@ namespace EmptyFrame.Core
 
             Current = target;
             return true;
+        }
+        
+        /// <summary>
+        /// 强制重置状态
+        /// </summary>
+        public void Reset()
+        {
+            Current = UIWindowState.None;
         }
     }
 }

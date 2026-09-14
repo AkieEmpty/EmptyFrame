@@ -6,7 +6,6 @@
     internal class UIWindowInstance
     {
         public UIWindowBase Window;
-        public UIWindowConfigBase Config;
         public readonly UIWindowStateMachine StateMachine = new UIWindowStateMachine();
 
         /// <summary>

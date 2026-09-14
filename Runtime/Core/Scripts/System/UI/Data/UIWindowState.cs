@@ -2,7 +2,6 @@
 {
     /// <summary>
     /// 窗口生命周期状态。
-    /// <para>None → Showing → Shown → Hiding → Hidden → (Showing 或 None)</para>
     /// </summary>
     internal enum UIWindowState
     {
@@ -10,7 +9,6 @@
         /// 窗口未创建
         /// </summary>
         None,
-        /// 
         /// <summary>
         /// 正在显示
         /// </summary>

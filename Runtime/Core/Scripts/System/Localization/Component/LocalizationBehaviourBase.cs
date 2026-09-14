@@ -14,7 +14,7 @@ namespace EmptyFrame.Core
         protected virtual void Awake()
         {
             component = GetComponent<T>();
-            if(component==null) Debug.LogError($"{GetType().Name} 未能找到组件: {typeof(T).Name}");
+            if(component==null) LogSystem.Error($"{GetType().Name} 未能找到组件: {typeof(T).Name}");
         }
        
         protected virtual void OnEnable()

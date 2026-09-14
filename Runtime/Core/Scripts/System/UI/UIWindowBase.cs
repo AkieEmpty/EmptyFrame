@@ -8,24 +8,6 @@ namespace EmptyFrame.Core
     /// </summary>
     public abstract class UIWindowBase : MonoBehaviour
     {
-        private UIWindowConfigBase windowConfig;
-
-        protected UIWindowConfigBase WindowConfig => windowConfig;
-
-        #region 内部初始化
-
-        
-        internal void Init(UIWindowConfigBase windowConfig)
-        {
-            this.windowConfig = windowConfig;
-        }
-        internal void Uninit()
-        {
-            this.windowConfig = null;
-        }
-
-        #endregion
-
         #region 生命周期
 
         /// <summary>

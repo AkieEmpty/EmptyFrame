@@ -33,7 +33,7 @@ namespace EmptyFrame.Network
             
         }
         #region 消息注册、注销
-        public void Register<T>(Action<ulong, T> action) where T : struct, INetworkSerializable
+        public void Register<T>(Action<ulong, T> action) where T : INetworkSerializable, new()
         {
             uint hash = GetTypeHash<T>();
 
@@ -48,7 +48,7 @@ namespace EmptyFrame.Network
                 handlerDic.Add(hash, messageHandler);
             }
         }
-        public void Unregister<T>(Action<ulong, T> action) where T : struct, INetworkSerializable
+        public void Unregister<T>(Action<ulong, T> action) where T : INetworkSerializable, new()
         {
             uint hash = GetTypeHash<T>();
 
@@ -60,7 +60,7 @@ namespace EmptyFrame.Network
         #endregion
 
         #region 消息发送
-        public void SendToServer<T>(T message) where T : struct, INetworkSerializable
+        public void SendToServer<T>(T message) where T : INetworkSerializable, new()
         {
             if (!networkManager.EnsureClient()) return;
 
@@ -71,7 +71,7 @@ namespace EmptyFrame.Network
                 messagingManager.SendUnnamedMessage(NetworkManager.ServerClientId, writer);
             }
         }
-        public void SendToClient<T>(ulong clientId, T message) where T : struct, INetworkSerializable
+        public void SendToClient<T>(ulong clientId, T message) where T : INetworkSerializable, new()
         {
             if (!networkManager.EnsureServer()) return;
 
@@ -82,7 +82,7 @@ namespace EmptyFrame.Network
                 messagingManager.SendUnnamedMessage(clientId, writer);
             }
         }
-        public void SendToAllClient<T>(T message) where T : struct, INetworkSerializable
+        public void SendToAllClient<T>(T message) where T : INetworkSerializable, new()
         {
             if (!networkManager.EnsureServer()) return;
 
@@ -133,7 +133,7 @@ namespace EmptyFrame.Network
             void Handle(ulong clientId, FastBufferReader reader);
         }
 
-        private class MessageHandler<T> : IMessageHandler where T : struct, INetworkSerializable
+        private class MessageHandler<T> : IMessageHandler where T : INetworkSerializable, new()
         {
             public event Action<ulong, T> OnMessage;
 

@@ -27,7 +27,7 @@ namespace EmptyFrame.Core
             {
                 localizationConfigDic.Add(groupName, localizationConfig);
             }
-            else Debug.LogWarning($"分组重复 ：{groupName}");
+            else LogSystem.Warning($"分组重复 ：{groupName}");
         }
 
         public void RemoveLocalizationConfig(string groupName)

@@ -1,4 +1,5 @@
 using System;
+using EmptyFrame.Core;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -25,12 +26,12 @@ namespace EmptyFrame.Network
             setting = Resources.Load<NetworkSystemSetting>("NetworkSystemSetting");
             if (setting == null)
             {
-                Debug.LogError("找不到 NetworkSystemSetting 配置文件，请确保 Resources 文件夹中存在该资源");
+                LogSystem.Error("找不到 NetworkSystemSetting 配置文件，请确保 Resources 文件夹中存在该资源");
                 return;
             }
             if (setting.NetworkManager == null)
             {
-                Debug.LogError("NetworkSystemSetting.NetworkManager 未赋值");
+                LogSystem.Error("NetworkSystemSetting.NetworkManager 未赋值");
                 return;
             }
             GameObject go = GameObject.Instantiate(setting.NetworkManager);
@@ -119,27 +120,27 @@ namespace EmptyFrame.Network
 
         #region ������Ϣ
         private static NetworkMessageModule messageModule;
-        public static void RegisterMessage<T>(Action<ulong, T> action) where T : struct, INetworkSerializable
+        public static void RegisterMessage<T>(Action<ulong, T> action) where T : INetworkSerializable, new()
         {
             messageModule.Register<T>(action);
         }
 
-        public static void UnregisterMessage<T>(Action<ulong, T> action) where T : struct, INetworkSerializable
+        public static void UnregisterMessage<T>(Action<ulong, T> action) where T : INetworkSerializable, new()
         {
             messageModule.Unregister<T>(action);
         }
 
-        public static void SendMessageToClient<T>(ulong clientId, T message) where T : struct, INetworkSerializable
+        public static void SendMessageToClient<T>(ulong clientId, T message) where T : INetworkSerializable, new()
         {
             messageModule.SendToClient<T>(clientId,message);
         }
 
-        public static void SendMessageToServer<T>(T message) where T : struct, INetworkSerializable
+        public static void SendMessageToServer<T>(T message) where T : INetworkSerializable, new()
         {
             messageModule.SendToServer<T>(message);
         }
 
-        public static void SendMessageToAllClient<T>(T message) where T : struct, INetworkSerializable
+        public static void SendMessageToAllClient<T>(T message) where T : INetworkSerializable, new()
         {
             messageModule.SendToAllClient<T>(message);
         }

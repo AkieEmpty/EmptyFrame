@@ -23,8 +23,8 @@ MonoBehaviour:
     SerializationNodes:
     - Name: WindowDefinitionDic
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[EmptyFrame.UIWindowDefinition,
-        EmptyFrame]], mscorlib
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[EmptyFrame.Core.UIWindowDefinition,
+        EmptyFrame.Core]], mscorlib
     - Name: comparer
       Entry: 7
       Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
@@ -34,82 +34,43 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: UITestWindowA
-    - Name: $v
-      Entry: 7
-      Data: 2|EmptyFrame.UIWindowDefinition, EmptyFrame
-    - Name: WindowKey
-      Entry: 1
-      Data: UITestWindowA
-    - Name: ConfigKey
-      Entry: 1
-      Data: UITestWindowAConfig
-    - Name: IsCached
-      Entry: 5
-      Data: true
-    - Name: Layer
-      Entry: 3
       Data: 1
     - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
       Entry: 7
       Data: 
     - Name: $k
       Entry: 1
-      Data: UITestWindowB
+      Data: UI_TestWindow
     - Name: $v
       Entry: 7
-      Data: 3|EmptyFrame.UIWindowDefinition, EmptyFrame
+      Data: 2|EmptyFrame.Core.UIWindowDefinition, EmptyFrame.Core
     - Name: WindowKey
       Entry: 1
-      Data: UITestWindowB
-    - Name: ConfigKey
+      Data: UI_TestWindow
+    - Name: PrefabRef
+      Entry: 7
+      Data: 3|EmptyFrame.Core.AssetReferenceUIWindow, EmptyFrame.Core
+    - Name: m_AssetGUID
       Entry: 1
-      Data: UITestWindowBConfig
-    - Name: IsCached
+      Data: 29f51039803a772439fce79c9423ac76
+    - Name: m_SubObjectName
+      Entry: 6
+      Data: 
+    - Name: m_SubObjectType
+      Entry: 6
+      Data: 
+    - Name: m_EditorAssetChanged
       Entry: 5
       Data: false
-    - Name: Layer
-      Entry: 3
-      Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: UITestWindowC
-    - Name: $v
-      Entry: 7
-      Data: 4|EmptyFrame.UIWindowDefinition, EmptyFrame
-    - Name: WindowKey
-      Entry: 1
-      Data: UITestWindowC
-    - Name: ConfigKey
-      Entry: 1
-      Data: UITestWindowCConfig
     - Name: IsCached
       Entry: 5
       Data: true
     - Name: Layer
       Entry: 3
-      Data: 1
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -122,3 +83,5 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  Title: <b>UI</b>
+  WindowPrefabPath: Assets/UI

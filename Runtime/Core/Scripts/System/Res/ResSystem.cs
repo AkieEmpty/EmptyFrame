@@ -24,33 +24,29 @@ namespace EmptyFrame.Core
         {
             return Addressables.LoadAssetAsync<T>(assetName).WaitForCompletion();
         }
-        public static IList<T> LoadAssetsSync<T>(string label) where T : UnityEngine.Object
+        public static T LoadAssetSync<T>(AssetReference assetReference) where T : UnityEngine.Object
         {
-            var handle = Addressables.LoadAssetsAsync<T>(label, null);
-            IList<T> result = handle.WaitForCompletion();
-
-            if (handle.Status != AsyncOperationStatus.Succeeded)
-            {
-                Debug.LogError($"批量加载失败 (Label): {label}");
-                Addressables.Release(handle);
-                return null;
-            }
-
-            return result;
+            return Addressables.LoadAssetAsync<T>(assetReference).WaitForCompletion();
         }
-        public static IList<T> LoadAssetsSync<T>(IList<string> keys, Addressables.MergeMode mode = Addressables.MergeMode.Union) where T : UnityEngine.Object
+        public static AsyncOperationHandle<IList<T>> LoadAssetsSync<T>(string label) where T : UnityEngine.Object
         {
-            var handle = Addressables.LoadAssetsAsync<T>(keys, null, mode);
-            IList<T> result = handle.WaitForCompletion();
+            AsyncOperationHandle<IList<T>> handle = Addressables.LoadAssetsAsync<T>(label, null);
+            handle.WaitForCompletion();
 
             if (handle.Status != AsyncOperationStatus.Succeeded)
-            {
-                Debug.LogError($"批量加载失败 (Keys 列表)");
-                Addressables.Release(handle);
-                return null;
-            }
+                LogSystem.Error($"批量加载失败 (Label): {label}");    
 
-            return result;
+            return handle;
+        }
+        public static AsyncOperationHandle<IList<T>> LoadAssetsSync<T>(IList<string> keys, Addressables.MergeMode mode = Addressables.MergeMode.Union) where T : UnityEngine.Object
+        {
+            AsyncOperationHandle<IList<T>> handle = Addressables.LoadAssetsAsync<T>(keys, null, mode);
+            handle.WaitForCompletion();
+
+            if (handle.Status != AsyncOperationStatus.Succeeded)
+                LogSystem.Error($"批量加载失败 (Keys 列表)");     
+
+            return handle;
         }
 
         /// <summary>
@@ -63,35 +59,34 @@ namespace EmptyFrame.Core
                 if (handle.Status == AsyncOperationStatus.Succeeded) callback?.Invoke(handle.Result);
                 else
                 {
-                    Debug.LogError($"资源加载失败: {assetName}");
+                    LogSystem.Error($"资源加载失败: {assetName}");
                     callback?.Invoke(null);
                 }
             };
         }
-        public static void LoadAssetsAsync<T>(string label, Action<IList<T>> callback) where T : UnityEngine.Object
+        public static AsyncOperationHandle<T> LoadAssetAsync<T>(AssetReference assetReference) where T : UnityEngine.Object
         {
-            Addressables.LoadAssetsAsync<T>(label, null).Completed += (handle) =>
-            {
-                if (handle.Status == AsyncOperationStatus.Succeeded) callback?.Invoke(handle.Result);
-                else
-                {
-                    Debug.LogError($"批量加载失败 (Label): {label}");
-                    callback?.Invoke(null);
-                }
-            };
+            return Addressables.LoadAssetAsync<T>(assetReference);  
         }
-        public static void LoadAssetsAsync<T>(IList<string> assetNames, Action<IList<T>> callback, Addressables.MergeMode mode = Addressables.MergeMode.Union) where T : UnityEngine.Object
+        public static AsyncOperationHandle<IList<T>> LoadAssetsAsync<T>(string label) where T : UnityEngine.Object
         {
-            Addressables.LoadAssetsAsync<T>(assetNames, null, mode).Completed += (handle) =>
+            AsyncOperationHandle<IList<T>> handle = Addressables.LoadAssetsAsync<T>(label, null);
+            handle.Completed += op =>
             {
-                if (handle.Status == AsyncOperationStatus.Succeeded) callback?.Invoke(handle.Result);
-                else
-                {
-                    Debug.LogError($"批量加载失败 (Keys 列表)");
-                    Addressables.Release(handle);
-                    callback?.Invoke(null);
-                }
+                if (op.Status != AsyncOperationStatus.Succeeded)
+                    LogSystem.Error($"批量加载失败 (Label): {label}");
             };
+            return handle;
+        }
+        public static AsyncOperationHandle<IList<T>> LoadAssetsAsync<T>(IList<string> keys, Addressables.MergeMode mode = Addressables.MergeMode.Union) where T : UnityEngine.Object
+        {
+            var handle = Addressables.LoadAssetsAsync<T>(keys, null, mode);
+            handle.Completed += op =>
+            {
+                if (op.Status != AsyncOperationStatus.Succeeded)
+                    LogSystem.Error($"批量加载失败 (Keys 列表)");
+            };
+            return handle;
         }
         #endregion
 
@@ -101,9 +96,9 @@ namespace EmptyFrame.Core
         /// </summary>
         public static void ReleaseAsset<T>(T obj) => Addressables.Release(obj);
         /// <summary>
-        /// 释放因批量加载而生成的句柄
+        /// 释放句柄
         /// </summary>
-        public static void ReleaseAssetsHandle<TObject>(AsyncOperationHandle<TObject> handle) => Addressables.Release(handle);
+        public static void ReleaseHandle<TObject>(AsyncOperationHandle<TObject> handle) => Addressables.Release(handle);
         /// <summary>
         /// 回收游戏对象
         /// </summary>
@@ -142,7 +137,7 @@ namespace EmptyFrame.Core
             return go.GetComponent<T>();
         }
         /// <summary>
-        /// 同步加载实例化游戏对象 (Addressables)
+        /// 同步加载实例化游戏对象 
         /// </summary>
         public static GameObject InstantiateSync(string assetName, Transform parent = null)
         {
@@ -163,7 +158,7 @@ namespace EmptyFrame.Core
                     }
                     helper.Init(AutoReleaseAssetAction);
                 } 
-                else Debug.LogError($"实例化失败，找不到资源: {assetName}");
+                else LogSystem.Error($"实例化失败，找不到资源: {assetName}");
             }
 
             return go;
@@ -173,8 +168,33 @@ namespace EmptyFrame.Core
             GameObject obj = InstantiateSync(assetName, parent);
             return obj?.GetComponent<T>();
         }
+        public static GameObject InstantiateSync(AssetReference assetReference, Transform parent = null)
+        {
+            GameObject go = Addressables.InstantiateAsync(assetReference, parent).WaitForCompletion();
+
+            if (go == null)
+            {
+                LogSystem.Error($"实例化失败: {assetReference.RuntimeKey}");
+                return null;
+            }
+
+            if (!go.TryGetComponent(out AddressableAutoReleaseHelper helper))
+            {
+                helper = go.AddComponent<AddressableAutoReleaseHelper>();
+                helper.hideFlags = HideFlags.HideInInspector;
+            }
+
+            helper.Init(AutoReleaseAssetAction);
+
+            return go;
+        }
+        public static T InstantiateSync<T>(AssetReference assetReference, Transform parent = null) where T : Component
+        {
+            GameObject obj = InstantiateSync(assetReference, parent);
+            return obj?.GetComponent<T>();
+        }
         /// <summary>
-        /// 异步加载实例化游戏对象 (Addressables)
+        /// 异步加载实例化游戏对象 
         /// </summary>
         public static void InstantiateAsync(string assetName, Transform parent = null, Action<GameObject> callback = null)
         {
@@ -200,7 +220,7 @@ namespace EmptyFrame.Core
                     }
                     helper.Init(AutoReleaseAssetAction);
                 }
-                else Debug.LogError($"实例化失败: {assetName}");
+                else LogSystem.Error($"实例化失败: {assetName}");
 
                 callback?.Invoke(go);
             };
@@ -220,7 +240,39 @@ namespace EmptyFrame.Core
         {
             InstantiateAsync<T>(assetName, null, callback);
         }
+        public static void InstantiateAsync(AssetReference assetReference, Transform parent = null, Action<GameObject> callback = null)
+        {
+            Addressables.InstantiateAsync(assetReference, parent).Completed += handle =>
+            {
+                GameObject go = null;
 
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    go = handle.Result;
+
+                    if (!go.TryGetComponent(out AddressableAutoReleaseHelper helper))
+                    {
+                        helper = go.AddComponent<AddressableAutoReleaseHelper>();
+                        helper.hideFlags = HideFlags.HideInInspector;
+                    }
+
+                    helper.Init(AutoReleaseAssetAction);
+                }
+                else
+                {
+                    LogSystem.Error($"[ResSystem] 实例化失败: {assetReference.RuntimeKey}");
+                }
+
+                callback?.Invoke(go);
+            };
+        }
+        public static void InstantiateAsync<T>(AssetReference assetReference, Transform parent = null, Action<T> callback = null) where T : Component
+        {
+            InstantiateAsync(assetReference, parent, go =>
+            {
+                callback?.Invoke(go?.GetComponent<T>());
+            });
+        }
         #endregion
 
        

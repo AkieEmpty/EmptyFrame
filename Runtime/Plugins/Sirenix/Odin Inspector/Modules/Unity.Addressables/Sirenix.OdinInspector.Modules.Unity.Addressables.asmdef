@@ -7,8 +7,7 @@
         "Sirenix.OdinInspector.Attributes",
         "Sirenix.OdinInspector.Editor",
         "Sirenix.Utilities.Editor",
-        "Sirenix.Utilities",
-        "Sirenix.OdinValidator.Editor"
+        "Sirenix.Utilities"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -19,11 +18,18 @@
         "Sirenix.OdinInspector.Attributes.dll",
         "Sirenix.OdinInspector.Editor.dll",
         "Sirenix.Utilities.Editor.dll",
-        "Sirenix.Utilities.dll",
-        "Sirenix.OdinValidator.Editor.dll"
+        "Sirenix.Utilities.dll"
     ],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
+    "defineConstraints": [
+        "ODIN_MODULE_ADDRESSABLES"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.addressables",
+            "expression": "1.0.0",
+            "define": "ODIN_MODULE_ADDRESSABLES"
+        }
+    ],
     "noEngineReferences": false
 }

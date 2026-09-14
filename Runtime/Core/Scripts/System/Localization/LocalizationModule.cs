@@ -47,7 +47,7 @@ namespace EmptyFrame.Core
 
                     if (localizationCacheDic.ContainsKey(key))
                     {
-                        Debug.LogError($"重复Key:{key},Config:{config.name}");
+                        LogSystem.Error($"重复Key:{key},Config:{config.name}");
                         continue;
                     }
 
@@ -56,7 +56,7 @@ namespace EmptyFrame.Core
                     {
                         localizationCacheDic.Add(key, value);
                     }
-                    else Debug.LogWarning($"缺少类型: [{languageType}] 的语言配置");
+                    else LogSystem.Warning($"缺少类型: [{languageType}] 的语言配置");
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace EmptyFrame.Core
             {
                 return content;
             }
-            Debug.LogWarning($"未找到本地化Key:{key}");
+            LogSystem.Warning($"未找到本地化Key:{key}");
             return key;
         }
 

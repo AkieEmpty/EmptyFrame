@@ -31,7 +31,7 @@ namespace EmptyFrame.Core
             var setting = Resources.Load<SaveSystemSetting>("SaveSystemSetting");
             if (setting == null)
             {
-                Debug.LogError("找不到 SaveSystemSetting 配置文件，请确保 Resources 文件夹中存在该资源");
+                LogSystem.Error("找不到 SaveSystemSetting 配置文件，请确保 Resources 文件夹中存在该资源");
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace EmptyFrame.Core
                     fileExtension = ".json";
                     break;
                 default:
-                    Debug.LogError($"未定义的存档文件类型 : {setting.SaveType}");
+                    LogSystem.Error($"未定义的存档文件类型 : {setting.SaveType}");
                     serializer = null;
                     break;
             }
@@ -166,7 +166,7 @@ namespace EmptyFrame.Core
         {
             if (comparer == null)
             {
-                Debug.LogWarning($"自定义排序器为空");
+                LogSystem.Warning($"自定义排序器为空");
                 return null;
             }
             return GetSortedSaves(comparer.Compare);
@@ -380,7 +380,7 @@ namespace EmptyFrame.Core
 
             if (data == null)
             {
-                Debug.LogWarning($"试图保存空数据");
+                LogSystem.Warning($"试图保存空数据");
                 return false;
             }
 
@@ -396,7 +396,7 @@ namespace EmptyFrame.Core
 
             if (!File.Exists(filePath))
             {
-                Debug.LogWarning($"找不到文件,路径: {filePath}");
+                LogSystem.Warning($"找不到文件,路径: {filePath}");
                 return null;
             }
 
@@ -417,7 +417,7 @@ namespace EmptyFrame.Core
             }
             catch (Exception e)
             {
-                Debug.LogError($"写入失败，路径: {filePath}。原因: {e.Message}");
+                LogSystem.Error($"写入失败，路径: {filePath}。原因: {e.Message}");
                 return false;
             }
         }
@@ -432,7 +432,7 @@ namespace EmptyFrame.Core
             }
             catch (Exception e)
             {
-                Debug.LogError($"读取失败，路径: {filePath}。原因: {e.Message}");
+                LogSystem.Error($"读取失败，路径: {filePath}。原因: {e.Message}");
                 return null;
             }
         }

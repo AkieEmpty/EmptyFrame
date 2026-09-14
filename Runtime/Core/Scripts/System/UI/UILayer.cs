@@ -1,49 +1,79 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace EmptyFrame.Core
 {
     /// <summary>
-    /// UI 层级组件，管理同层级窗口的排序和遮罩。
+    /// UI 层级
     /// </summary>
-    internal class UILayer : MonoBehaviour
+    [Serializable]
+    internal class UILayer
     {
-        [SerializeField] private Image blockerImage;
-        [SerializeField] private bool enableBlocker;
+        [SerializeField,BoxGroup]
+        [LabelText("根节点")]private RectTransform root;
+        
+        [SerializeField,BoxGroup]
+        [LabelText("遮罩")]private Image blockerImage;
+        
+        [SerializeField,BoxGroup]
+        [LabelText("启用遮罩")]private bool enableBlocker;
 
-        private readonly List<UIWindowBase> windowList = new List<UIWindowBase>();
+        private List<UIWindowBase> windowList;
+
+        public Transform Root => root;
+        
+        public void Init()
+        {
+            windowList = new List<UIWindowBase>();
+        }
 
         #region 窗口管理
 
         /// <summary>
-        /// 添加窗口到该层级并刷新排序
+        /// 添加窗口到该层级
         /// </summary>
         public void AddWindow(UIWindowBase window)
         {
             windowList.Add(window);
-            RefreshHierarchy();
+            Refresh();
         }
 
         /// <summary>
-        /// 从该层级移除窗口并刷新排序
+        /// 从该层级移除窗口
         /// </summary>
         public void RemoveWindow(UIWindowBase window)
         {
             windowList.Remove(window);
-            RefreshHierarchy();
+            Refresh();
+        }
+
+        /// <summary>
+        /// 清空该层级的所有窗口
+        /// </summary>
+        public void ClearWindows()
+        {
+            windowList.Clear();
+            Refresh();
         }
 
         #endregion
 
-        #region 内部逻辑
-
-        private void RefreshHierarchy()
+        #region 层级显示
+        
+        /// <summary>
+        /// 刷新层级显示
+        /// </summary>
+        private void Refresh()
         {
             RefreshWindowOrder();
             RefreshBlocker();
         }
-
+        /// <summary>
+        /// 刷新窗口显示顺序
+        /// </summary>
         private void RefreshWindowOrder()
         {
             if (windowList.Count == 0) return;
@@ -52,21 +82,28 @@ namespace EmptyFrame.Core
             UIWindowBase topWindow = windowList[windowList.Count - 1];
             topWindow.transform.SetAsLastSibling();
         }
-
+        /// <summary>
+        /// 刷新遮罩显示
+        /// </summary>
         private void RefreshBlocker()
         {
-            // 仅一个窗口时不需要遮罩
+            // 仅一个窗口时关闭遮罩拦截
             if (windowList.Count <= 1)
             {
                 blockerImage.raycastTarget = false;
                 return;
             }
 
-            // 遮罩放在顶层窗口下方，拦截对底层窗口的点击
-            blockerImage.transform.SetSiblingIndex(transform.childCount - 2);
+            // 遮罩位于顶层窗口下方
+            blockerImage.transform.SetSiblingIndex(root.childCount - 2);
+            
+            // 启用遮罩时拦截对其他窗口的点击
             blockerImage.raycastTarget = enableBlocker;
         }
-
+        
         #endregion
+        
+
+    
     }
 }

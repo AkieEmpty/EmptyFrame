@@ -32,7 +32,7 @@ namespace EmptyFrame.Core
             var setting = Resources.Load<AudioSystemSetting>("AudioSystemSetting");
             if (setting == null)
             {
-                Debug.LogError("找不到 AudioSystemSetting 配置文件，请确保 Resources 文件夹中存在该资源");
+                LogSystem.Error("找不到 AudioSystemSetting 配置文件，请确保 Resources 文件夹中存在该资源");
                 return;
             }
 
