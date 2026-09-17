@@ -46,9 +46,9 @@ namespace EmptyFrame.Core
         /// <summary>
         /// 同步打开窗口
         /// </summary>
-        public static void Open<T>() where T : UIWindowBase
+        public static bool Open<T>() where T : UIWindowBase
         {
-            module.Open<T>();
+            return module.Open<T>();
         }
         /// <summary>
         /// 异步打开窗口
@@ -61,16 +61,16 @@ namespace EmptyFrame.Core
         /// <summary>
         /// 隐藏窗口
         /// </summary>
-        public static void Hide<T>() where T : UIWindowBase
+        public static bool Hide<T>() where T : UIWindowBase
         {
-            module.Hide<T>();
+            return module.Hide<T>();
         }
         /// <summary>
         /// 关闭窗口
         /// </summary>
         public static void Close<T>() where T : UIWindowBase
         {
-            module.Close<T>();
+             module.Close<T>();
         }
         /// <summary>
         /// 关闭所有窗口并清空导航栈
@@ -100,6 +100,40 @@ namespace EmptyFrame.Core
         {
             module.Pop();
         }
+        #endregion
+
+        #region UI窗口注册
+        
+        /// <summary>
+        /// 注册UI窗口定义
+        /// </summary>
+        public static void RegisterDefinition(string windowKey,int layer, bool isCached) 
+        {
+            UIWindowDefinition definition = new UIWindowDefinition(windowKey, layer, isCached);
+            module.RegisterDefinition(definition);
+        }
+        public static void RegisterDefinition<T>(int layer, bool isCached) where T : UIWindowBase
+        {
+            string windowKey = typeof(T).Name;
+            RegisterDefinition(windowKey, layer, isCached);
+        }
+
+        
+        /// <summary>
+        /// 注销UI窗口定义
+        /// </summary>
+         public static void UnregisterDefinition(string windowKey) 
+        {
+            module.UnregisterDefinition(windowKey);
+        }
+        public static void UnregisterDefinition<T>() where T : UIWindowBase
+        {
+            string windowKey = typeof(T).Name;
+            UnregisterDefinition(windowKey);
+        }
+
+      
+        
         #endregion
     }
 }

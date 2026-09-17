@@ -15,10 +15,8 @@ namespace EmptyFrame.Core
     internal partial class UISystemSetting : FrameSettingBase
     {
         public UISystemSetting() => Title = "<b>UI</b>";
-
-        [LabelText("预制体路径")]public string WindowPrefabPath = "Assets/UI";
-
-        [LabelText("窗口定义映射"), PropertySpace(SpaceBefore = 0)]
+        
+        [LabelText("窗口定义映射"), PropertySpace(SpaceBefore = 0),ReadOnly]
         [DictionaryDrawerSettings(KeyLabel = "窗口Key", ValueLabel = "窗口定义")]
         public Dictionary<string, UIWindowDefinition> WindowDefinitionDic = new Dictionary<string, UIWindowDefinition>();
     }
@@ -70,60 +68,17 @@ namespace EmptyFrame.Core
                     IEnumerable<UIWindowDefinitionAttribute> attributes = type.GetCustomAttributes<UIWindowDefinitionAttribute>();
                     foreach (UIWindowDefinitionAttribute attribute in attributes)
                     {
-                        UIWindowDefinition definition = new UIWindowDefinition
-                        {
-                            WindowKey = attribute.WindowKey,
-                            IsCached = attribute.IsCached,
-                            PrefabRef = GetPrefabReference(attribute.WindowKey),
-                            Layer = attribute.Layer,
-                        };
+                        UIWindowDefinition definition = new UIWindowDefinition(attribute.WindowKey, attribute.Layer, attribute.IsCached);
 
                         WindowDefinitionDic.Add(attribute.WindowKey, definition);
                     }
                 }
             }
+            
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssetIfDirty(this);
         }
 
-        private AssetReferenceUIWindow GetPrefabReference(string windowKey)
-        {
-            if (string.IsNullOrEmpty(WindowPrefabPath))
-            {
-                Debug.LogError($"窗口预制体目录未配置");
-                return null;
-            }
-            
-            // 如果目录不存在，则逐级自动创建
-            if (!AssetDatabase.IsValidFolder(WindowPrefabPath))
-            {
-                string[] folders = WindowPrefabPath.Split('/');
-                string currentPath = folders[0];
-
-                for (int i = 1; i < folders.Length; i++)
-                {
-                    string nextPath = $"{currentPath}/{folders[i]}";
-
-                    if (!AssetDatabase.IsValidFolder(nextPath))
-                    {
-                        AssetDatabase.CreateFolder(currentPath, folders[i]);
-                    }
-
-                    currentPath = nextPath;
-                }
-
-                AssetDatabase.Refresh();
-            }
-            
-            string path = $"{WindowPrefabPath}/{windowKey}.prefab";
-            string guid = AssetDatabase.AssetPathToGUID(path);
-            
-            if (string.IsNullOrEmpty(guid))
-            {
-                Debug.LogWarning($"找不到窗口预制体：{path}");
-                return null;
-            }
-
-            return new AssetReferenceUIWindow(guid);
-        }
     }
 #endif
 }

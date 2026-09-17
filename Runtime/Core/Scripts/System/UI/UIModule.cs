@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -24,7 +24,7 @@ namespace EmptyFrame.Core
         {
             for (int i = 0; i < layers.Length; i++) layers[i].Init();
 
-            definitionDic = setting.WindowDefinitionDic;
+            definitionDic = new Dictionary<string, UIWindowDefinition>(setting.WindowDefinitionDic);
         }
         
         #region UI窗口操作
@@ -379,6 +379,39 @@ namespace EmptyFrame.Core
         
         #endregion
 
+        #region UI窗口注册
+        
+        /// <summary>
+        /// 注册UI窗口定义
+        /// </summary>
+        public void RegisterDefinition(UIWindowDefinition definition)
+        {
+            if (!definitionDic.TryAdd(definition.WindowKey, definition))
+            {
+                LogSystem.Warning($"窗口注册失败，窗口已存在：{definition.WindowKey}");
+            }
+        }
+        
+        /// <summary>
+        /// 注销指定窗口
+        /// </summary>
+        public void UnregisterDefinition(string windowKey)
+        {
+            if (instancesDic.ContainsKey(windowKey))
+            {
+                LogSystem.Warning($"窗口注销失败，窗口存在运行实例：{windowKey}");
+                return;
+            }
+
+            
+            if (!definitionDic.Remove(windowKey))
+            {
+                LogSystem.Warning($"窗口注销失败，窗口不存在：{windowKey}");
+            }
+        }
+        
+        #endregion
+        
         #region 运行时数据
         
         /// <summary>
@@ -408,11 +441,10 @@ namespace EmptyFrame.Core
         /// </summary>
         private UIWindowBase CreateWindowSync(UIWindowDefinition definition)
         {
-            if (!ValidatePrefabRef(definition)) return null;
 
             Transform parent = GetLayer(definition.Layer).Root;
 
-            UIWindowBase window = ResSystem.InstantiateSync<UIWindowBase>( definition.PrefabRef, parent);
+            UIWindowBase window = ResSystem.InstantiateSync<UIWindowBase>( definition.WindowKey, parent);
 
             if (window != null) window.gameObject.name = definition.WindowKey;
 
@@ -424,13 +456,7 @@ namespace EmptyFrame.Core
         /// </summary>
         private void CreateWindowAsync(UIWindowDefinition definition, Transform parent, Action<UIWindowBase> callback)
         {
-            if (!ValidatePrefabRef(definition))
-            {
-                callback?.Invoke(null);
-                return;
-            }
-
-            ResSystem.InstantiateAsync<UIWindowBase>(definition.PrefabRef, parent, window =>
+            ResSystem.InstantiateAsync<UIWindowBase>(definition.WindowKey, parent, window =>
             {
                 if (window != null) window.gameObject.name = definition.WindowKey;
                 
@@ -450,15 +476,7 @@ namespace EmptyFrame.Core
             instance.Window = null;
         }
         
-        /// <summary>
-        /// 验证预制体引用是否有效
-        /// </summary>
-        private bool ValidatePrefabRef(UIWindowDefinition definition)
-        {
-            if (definition.PrefabRef != null && definition.PrefabRef.RuntimeKeyIsValid()) return true;
-            LogSystem.Error($"窗口定义缺少有效的预制体引用: {definition.WindowKey}");
-            return false;
-        }
+      
         
         #endregion
         

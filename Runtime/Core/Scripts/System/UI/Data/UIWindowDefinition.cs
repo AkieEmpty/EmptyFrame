@@ -8,17 +8,12 @@ namespace EmptyFrame.Core
     /// UI窗口定义
     /// </summary>
     [Serializable]
-    internal class UIWindowDefinition
+    public class UIWindowDefinition
     {
         /// <summary>
         /// 窗口唯一标识
         /// </summary>
         [LabelText("窗口标识")]public string WindowKey;
-
-        /// <summary>
-        /// 窗口预制体引用
-        /// </summary>
-        [LabelText("预制体引用")]public AssetReferenceUIWindow PrefabRef;
 
         /// <summary>
         /// 是否缓存窗口
@@ -29,6 +24,13 @@ namespace EmptyFrame.Core
         /// 窗口层级
         /// </summary>
         [LabelText("窗口层级")]public int Layer;
-        
+
+ 
+        public UIWindowDefinition(string windowKey, int layer, bool isCached)
+        {
+            this.WindowKey = windowKey;
+            this.Layer = layer;
+            this.IsCached = isCached;
+        }
     }
 }

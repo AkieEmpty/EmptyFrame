@@ -34,49 +34,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: UI_TestWindow
-    - Name: $v
-      Entry: 7
-      Data: 2|EmptyFrame.Core.UIWindowDefinition, EmptyFrame.Core
-    - Name: WindowKey
-      Entry: 1
-      Data: UI_TestWindow
-    - Name: PrefabRef
-      Entry: 7
-      Data: 3|EmptyFrame.Core.AssetReferenceUIWindow, EmptyFrame.Core
-    - Name: m_AssetGUID
-      Entry: 1
-      Data: 29f51039803a772439fce79c9423ac76
-    - Name: m_SubObjectName
-      Entry: 6
-      Data: 
-    - Name: m_SubObjectType
-      Entry: 6
-      Data: 
-    - Name: m_EditorAssetChanged
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: IsCached
-      Entry: 5
-      Data: true
-    - Name: Layer
-      Entry: 3
       Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -84,4 +42,3 @@ MonoBehaviour:
       Entry: 8
       Data: 
   Title: <b>UI</b>
-  WindowPrefabPath: Assets/UI
