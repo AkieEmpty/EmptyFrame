@@ -28,6 +28,7 @@ namespace EmptyFrame.Core
         public void Init()
         {
             windowList = new List<UIWindowBase>();
+            RefreshBlocker();
         }
 
         #region 窗口管理
